@@ -25,6 +25,21 @@ int main(int argc, char* argv[])
 		cout << "Oh no" << IMG_GetError();
 	}
 
+	//Items(using arrays..) 0 = no item, 1 = choclate, 2 = grenade, 3 = atk up, 4 = def up
+	int items[10];
+
+	for (int i = 0; i <= 9; i++)
+	{
+		items[i] = 0;
+	}
+	items[0] = 2;
+	items[1] = 1;
+	items[2] = 3;
+	for (int i = 0; i <= 9; i++)
+	{
+		cout << "items[" << i << "] = " << items[i]<<endl;
+	}
+
 	//the region of the texture we want to draw from
 	SDL_Rect srcRect;
 	srcRect.x = 0;
@@ -42,8 +57,12 @@ int main(int argc, char* argv[])
 	//render copy renders texture to the window
 	SDL_RenderCopy(renderer, testImg, &srcRect, &destRect);
 	SDL_RenderPresent(renderer);
+	
 	SDL_Delay(3000);
-
+	SDL_DestroyTexture(testImg);
+	SDL_DestroyRenderer(renderer);
+	SDL_DestroyWindow(window);
+	SDL_Quit();
 
 	return 0;
 
