@@ -12,10 +12,35 @@ MapScreen::MapScreen(SDL_Renderer* renderer, int* items)
 			map[i][y] = 0;
 		}
 	}
-	map[1][1] = 1;
+	/*p[1][1] = 1;
 	map[2][1] = 1;
 	map[3][1] = 1;
-	map[4][1] = 1;
+	map[4][1] = 1;*/
+
+	fstream mapFile("assets/map.txt");
+	if (mapFile.is_open())
+	{
+		for (int y = 0; y <=9; y++)
+		{
+			for (int i = 0; i <= 9; i++)
+			{
+				char grid;
+				mapFile >> grid;//read into grid, one by one
+
+				if (grid == '0')
+				{
+					map[i][y] = 0;//wall
+				}
+				else
+				{
+					map[i][y] = 1;//land
+				}
+			}
+		}
+	}
+	//close file
+	mapFile.close();
+
 }
 
 MapScreen::~MapScreen()
@@ -25,7 +50,7 @@ MapScreen::~MapScreen()
 
 void MapScreen::draw()
 {
-	SDL_Rect tileRect = { 0,0,32,32 };
+	SDL_Rect tileRect = { 0,0,64,64 };
 
 	for (int i = 0; i <= 9; i++)
 	{
