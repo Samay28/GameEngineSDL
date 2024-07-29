@@ -2,6 +2,7 @@
 #include "SDL_image.h"
 #include "SDL_mixer.h"
 #include "SDL_ttf.h"
+#include "MapScreen.h"
 #include <iostream>
 using namespace std;
 
@@ -11,7 +12,7 @@ int main(int argc, char* argv[])
 	SDL_Window* window = SDL_CreateWindow("GameEngine", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1200, 800, SDL_WINDOW_SHOWN);
 	SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, 0);
 
-	SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+	SDL_SetRenderDrawColor(renderer, 21, 209, 249, 255);
 
 	SDL_RenderClear(renderer);
 		
@@ -32,13 +33,16 @@ int main(int argc, char* argv[])
 	{
 		items[i] = 0;
 	}
-	items[0] = 2;
-	items[1] = 1;
-	items[2] = 3;
+	items[0] = 1;
+	//items[1] = 1;
+	//items[2] = 3;
 	for (int i = 0; i <= 9; i++)
 	{
 		cout << "items[" << i << "] = " << items[i]<<endl;
 	}
+
+	//setup map
+	MapScreen mapScreen(renderer, items);
 
 	//the region of the texture we want to draw from
 	SDL_Rect srcRect;
@@ -56,6 +60,8 @@ int main(int argc, char* argv[])
 
 	//render copy renders texture to the window
 	SDL_RenderCopy(renderer, testImg, &srcRect, &destRect);
+
+	mapScreen.draw();
 	SDL_RenderPresent(renderer);
 	
 	SDL_Delay(3000);
