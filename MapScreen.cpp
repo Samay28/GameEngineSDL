@@ -90,6 +90,32 @@ MapScreen::~MapScreen() {
     SDL_DestroyTexture(chestTexture);
 }
 
+void MapScreen::update()
+{
+    SDL_Event sdlEvent;
+
+    //loop thru input events and copy their details one by one into sdl event variable
+    while (SDL_PollEvent(&sdlEvent))
+    {
+        //when user clicks window button
+        if (sdlEvent.type == SDL_QUIT)
+        {
+            quit = true;
+        }
+        //if a button was pressed first
+        if (sdlEvent.type == SDL_KEYDOWN)
+        {
+            //check which button?
+            if (sdlEvent.key.keysym.scancode == SDL_SCANCODE_ESCAPE)
+            {
+                quit = true;
+            }
+
+            //player mov
+        }
+    }
+}
+
 void MapScreen::draw() {
     SDL_Rect tileRect = { 0, 0, 120, 105 };
 

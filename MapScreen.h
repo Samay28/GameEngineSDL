@@ -23,9 +23,13 @@ public:
 
 	SDL_Texture* heroTexture, * doorTexture, * globTexture,*chestTexture;
 
+	bool quit = false;
+
 	MapScreen(SDL_Renderer* renderer, int* items);
 	~MapScreen();
 
+
+	void update();
 	void draw();
 };
 
