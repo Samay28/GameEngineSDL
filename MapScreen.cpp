@@ -112,6 +112,38 @@ void MapScreen::update()
             }
 
             //player mov
+            int hx = heroObj.x;
+            int hy = heroObj.y;
+           
+            //right arrow
+            if (sdlEvent.key.keysym.scancode == SDL_SCANCODE_RIGHT)
+            {
+                hx++;
+            }
+            //left arrow
+            if (sdlEvent.key.keysym.scancode == SDL_SCANCODE_LEFT)
+            {
+                hx--;
+            }
+            if (sdlEvent.key.keysym.scancode == SDL_SCANCODE_DOWN)
+            {
+                hy++;
+            }
+            if (sdlEvent.key.keysym.scancode == SDL_SCANCODE_UP)
+            {
+                hy--;
+            }
+
+            //if hx and hy are within the grid
+            if (hx >= 0 && hx <= 9 && hy>=0 && hy<=9 && map[hx][hy]==1) //within grid and on land check
+            {
+                heroObj.x = hx;
+                heroObj.y = hy;
+            }
+            else
+            {
+                cout << "invalid move" << endl;
+            }
         }
     }
 }
