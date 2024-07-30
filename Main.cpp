@@ -9,7 +9,7 @@ using namespace std;
 int main(int argc, char* argv[])
 {
 	SDL_Init(SDL_INIT_EVERYTHING);
-	SDL_Window* window = SDL_CreateWindow("GameEngine", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 600,400,SDL_WINDOW_SHOWN);
+	SDL_Window* window = SDL_CreateWindow("GameEngine", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1200, 800, SDL_WINDOW_SHOWN);
 	SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, 0);
 
 	SDL_SetRenderDrawColor(renderer, 21, 209, 249, 255);
@@ -34,8 +34,7 @@ int main(int argc, char* argv[])
 		items[i] = 0;
 	}
 	items[0] = 1;
-	//items[1] = 1;
-	//items[2] = 3;
+
 	for (int i = 0; i <= 9; i++)
 	{
 		cout << "items[" << i << "] = " << items[i]<<endl;

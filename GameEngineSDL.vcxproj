@@ -135,9 +135,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="MapObject.cpp" />
     <ClCompile Include="MapScreen.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="MapObject.h" />
     <ClInclude Include="MapScreen.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

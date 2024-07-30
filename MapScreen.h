@@ -3,6 +3,8 @@
 #include <string>
 #include <SDL.h>
 #include <SDL_image.h>
+#include "MapObject.h"
+#include <list>// dynamic array
 #include <fstream>
 using namespace std;
 class MapScreen
@@ -15,6 +17,11 @@ public:
 	SDL_Renderer* renderer;
 
 	int map[10][10]; //0 = walls,1= ground
+	MapObject heroObj;
+	MapObject door;
+	list<MapObject> mapObjects;
+
+	SDL_Texture* heroTexture, * doorTexture, * globTexture,*chestTexture;
 
 	MapScreen(SDL_Renderer* renderer, int* items);
 	~MapScreen();
