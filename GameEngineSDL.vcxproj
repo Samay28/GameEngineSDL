@@ -134,11 +134,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="InfoBox.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MapObject.cpp" />
     <ClCompile Include="MapScreen.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="InfoBox.h" />
     <ClInclude Include="MapObject.h" />
     <ClInclude Include="MapScreen.h" />
   </ItemGroup>

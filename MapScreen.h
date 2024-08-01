@@ -5,6 +5,7 @@
 #include <SDL_image.h>
 #include "MapObject.h"
 #include <list>// dynamic array
+#include "InfoBox.h"
 #include <fstream>
 using namespace std;
 class MapScreen
@@ -24,6 +25,8 @@ public:
 	SDL_Texture* heroTexture, * doorTexture, * globTexture,*chestTexture;
 
 	bool quit = false;
+
+	InfoBox infoBox;
 
 	MapScreen(SDL_Renderer* renderer, int* items);
 	~MapScreen();

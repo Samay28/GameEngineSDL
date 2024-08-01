@@ -81,6 +81,10 @@ MapScreen::MapScreen(SDL_Renderer* renderer, int* items) {
     if (!chestTexture) {
         std::cout << "Failed to load chest texture: " << IMG_GetError() << std::endl;
     }
+
+    //setup info box
+    infoBox.setup(renderer);
+    infoBox.setText("Welcome to the Dungeon");
 }
 
 MapScreen::~MapScreen() {
@@ -110,39 +114,47 @@ void MapScreen::update()
             {
                 quit = true;
             }
-
-            //player mov
-            int hx = heroObj.x;
-            int hy = heroObj.y;
-           
-            //right arrow
-            if (sdlEvent.key.keysym.scancode == SDL_SCANCODE_RIGHT)
+            //hide infobox when space is pressed
+            if (sdlEvent.key.keysym.scancode == SDL_SCANCODE_SPACE)
             {
-                hx++;
-            }
-            //left arrow
-            if (sdlEvent.key.keysym.scancode == SDL_SCANCODE_LEFT)
-            {
-                hx--;
-            }
-            if (sdlEvent.key.keysym.scancode == SDL_SCANCODE_DOWN)
-            {
-                hy++;
-            }
-            if (sdlEvent.key.keysym.scancode == SDL_SCANCODE_UP)
-            {
-                hy--;
+                infoBox.visible = false;
             }
 
-            //if hx and hy are within the grid
-            if (hx >= 0 && hx <= 9 && hy>=0 && hy<=9 && map[hx][hy]==1) //within grid and on land check
+            if (infoBox.visible == false)
             {
-                heroObj.x = hx;
-                heroObj.y = hy;
-            }
-            else
-            {
-                cout << "invalid move" << endl;
+                //player mov
+                int hx = heroObj.x;
+                int hy = heroObj.y;
+
+                //right arrow
+                if (sdlEvent.key.keysym.scancode == SDL_SCANCODE_RIGHT)
+                {
+                    hx++;
+                }
+                //left arrow
+                if (sdlEvent.key.keysym.scancode == SDL_SCANCODE_LEFT)
+                {
+                    hx--;
+                }
+                if (sdlEvent.key.keysym.scancode == SDL_SCANCODE_DOWN)
+                {
+                    hy++;
+                }
+                if (sdlEvent.key.keysym.scancode == SDL_SCANCODE_UP)
+                {
+                    hy--;
+                }
+
+                //if hx and hy are within the grid
+                if (hx >= 0 && hx <= 9 && hy >= 0 && hy <= 9 && map[hx][hy] == 1) //within grid and on land check
+                {
+                    heroObj.x = hx;
+                    heroObj.y = hy;
+                }
+                else
+                {
+                    cout << "invalid move" << endl;
+                }
             }
         }
     }
@@ -197,6 +209,9 @@ void MapScreen::draw() {
             SDL_RenderCopy(renderer, chestTexture, NULL, &tileRect);
         }
     }
+
+    //draw infobox on top
+    infoBox.draw();
 
     // Present the renderer
     SDL_RenderPresent(renderer);

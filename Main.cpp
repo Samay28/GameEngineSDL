@@ -41,6 +41,13 @@ int main(int argc, char* argv[])
 			cout << "items[" << i << "] = " << items[i] << endl;
 		}
 
+		if (TTF_Init() != 0)
+		{
+			cout << "SDL TTF Init Error: " << TTF_GetError() << endl;
+			system("pause");
+			return 1;
+		}
+
 		//setup map
 		MapScreen mapScreen(renderer, items);
 
