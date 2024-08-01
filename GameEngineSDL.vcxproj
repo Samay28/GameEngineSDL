@@ -134,15 +134,25 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Character.cpp" />
+    <ClCompile Include="Glob.cpp" />
+    <ClCompile Include="Hero.cpp" />
     <ClCompile Include="InfoBox.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MapObject.cpp" />
     <ClCompile Include="MapScreen.cpp" />
+    <ClCompile Include="Mimic.cpp" />
+    <ClCompile Include="Puzzles.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Character.h" />
+    <ClInclude Include="Glob.h" />
+    <ClInclude Include="Hero.h" />
     <ClInclude Include="InfoBox.h" />
     <ClInclude Include="MapObject.h" />
     <ClInclude Include="MapScreen.h" />
+    <ClInclude Include="Mimic.h" />
+    <ClInclude Include="Puzzles.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

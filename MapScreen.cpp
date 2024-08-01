@@ -1,218 +1,247 @@
 #include "MapScreen.h"
 
-MapScreen::MapScreen(SDL_Renderer* renderer, int* items) {
-    this->renderer = renderer;
-    this->items = items;
 
-    for (int i = 0; i <= 9; i++) {
-        for (int y = 0; y <= 9; y++) {
-            map[i][y] = 0;
-        }
-    }
 
-    std::fstream mapFile("assets/map.txt");
-    if (mapFile.is_open()) {
-        for (int y = 0; y <= 9; y++) {
-            for (int i = 0; i <= 9; i++) {
-                char grid;
-                mapFile >> grid; // Read into grid, one by one
+MapScreen::MapScreen(SDL_Renderer* renderer, Hero* hero, int* items)
+{
+	this->renderer = renderer;
+	this->hero = hero;
+	this->items = items;
 
-                if (grid == '0') {
-                    map[i][y] = 0; // Wall
-                }
-                else {
-                    map[i][y] = 1; // Land
+	//loop through map using nested loop and clear all values out to be zero(walls)
+	for (int x = 0; x <= 9; x++)
+	{
+		for (int y = 0; y <= 9; y++)
+		{
+			map[x][y] = 0;
+		}
 
-                    if (grid == 'h') {
-                        heroObj.type = 1;
-                        heroObj.x = i;
-                        heroObj.y = y;
-                    }
-                    else if (grid == 'd') {
-                        door.type = 2;
-                        door.x = i;
-                        door.y = y;
-                    }
-                    else if (grid == 'c') {
-                        MapObject chest;
-                        chest.type = 5;
-                        chest.x = i;
-                        chest.y = y;
-                        mapObjects.push_back(chest);
-                    }
-                    else if (grid == 'm') {
-                        MapObject mimic;
-                        mimic.type = 4;
-                        mimic.x = i;
-                        mimic.y = y;
-                        mapObjects.push_back(mimic);
-                    }
-                    else if (grid == 'g') {
-                        MapObject glob;
-                        glob.type = 3;
-                        glob.x = i;
-                        glob.y = y;
-                        mapObjects.push_back(glob);
-              
-                    }
-                }
-            }
-        }
-    }
-    mapFile.close();
+	}
+	//manual room building
+	map[1][1] = 1;
+	map[2][1] = 1;
+	map[3][1] = 1;
+	map[1][2] = 1;
+	/*map[2][2] = 1;
+	map[3][2] = 1;*/
 
-    // Load textures
-    heroTexture = IMG_LoadTexture(renderer, "assets/girlTile.png");
-    if (!heroTexture) {
-        std::cout << "Failed to load hero texture: " << IMG_GetError() << std::endl;
-    }
+	//Open map text file
+	fstream mapFile("assets/map.txt");
+	if (mapFile.is_open())
+	{
+		for (int y = 0; y <= 9; y++)
+		{
+			for (int x = 0; x <= 9; x++)
+			{
+				//read in a single character from where we are up to in the file
+				char grid;
+				mapFile >> grid;
+				if (grid == '0')
+				{
+					map[x][y] = 0; //wall
+				}
+				else
+				{
+					map[x][y] = 1;//land
 
-    doorTexture = IMG_LoadTexture(renderer, "assets/doorTile.png");
-    if (!doorTexture) {
-        std::cout << "Failed to load door texture: " << IMG_GetError() << std::endl;
-    }
+					//TODO was it a hero, glob, chest or mimic???
+					if (grid == 'h')
+					{
+						heroObj.type = 1;
+						heroObj.x = x;
+						heroObj.y = y;
+					}
+					else if (grid == 'd')
+					{
+						door.type = 2;
+						door.x = x;
+						door.y = y;
+					}
+					else if (grid == 'c')
+					{
+						MapObject chest;
+						chest.type = 5;
+						chest.x = x;
+						chest.y = y;
 
-    globTexture = IMG_LoadTexture(renderer, "assets/globTile.png");
-    if (!globTexture) {
-        std::cout << "Failed to load glob texture: " << IMG_GetError() << std::endl;
-    }
+						mapObjects.push_back(chest);
+					}
+					else if (grid == 'g')
+					{
+						MapObject glob;
+						glob.type = 3;
+						glob.x = x;
+						glob.y = y;
 
-    chestTexture = IMG_LoadTexture(renderer, "assets/chestTile.png");
-    if (!chestTexture) {
-        std::cout << "Failed to load chest texture: " << IMG_GetError() << std::endl;
-    }
+						mapObjects.push_back(glob);
+					}
+					else if (grid == 'm')
+					{
+						MapObject mimic;
+						mimic.type = 4;
+						mimic.x = x;
+						mimic.y = y;
 
-    //setup info box
-    infoBox.setup(renderer);
-    infoBox.setText("Welcome to the Dungeon");
+						mapObjects.push_back(mimic);
+					}
+				}
+			}
+		}
+	}
+	//close file
+	mapFile.close();
+
+	//LOAD UP TILE TEXTURES
+	heroTexture = IMG_LoadTexture(renderer, "assets/girlTile.png");
+	doorTexture = IMG_LoadTexture(renderer, "assets/doorTile.png");
+	globTexture = IMG_LoadTexture(renderer, "assets/globTile.png");
+	chestTexture = IMG_LoadTexture(renderer, "assets/chestTile.png");
+
+	//setup info box
+	infoBox.setup(renderer);
+	infoBox.setText("Welcome to the Dungeon!");
 }
 
-MapScreen::~MapScreen() {
-    SDL_DestroyTexture(heroTexture);
-    SDL_DestroyTexture(globTexture);
-    SDL_DestroyTexture(doorTexture);
-    SDL_DestroyTexture(chestTexture);
+
+MapScreen::~MapScreen()
+{
+	//CLEANUP TEXTURE MEMORY
+	SDL_DestroyTexture(heroTexture);
+	SDL_DestroyTexture(doorTexture);
+	SDL_DestroyTexture(globTexture);
+	SDL_DestroyTexture(chestTexture);
 }
 
 void MapScreen::update()
 {
-    SDL_Event sdlEvent;
+	//read user inputs including keyboard, mouse, gamepads, screen resize/close, touchscreens etc
+	SDL_Event sdlEvent;
+	//loop through input events and copy their details one by one into our sdlEvent variable
+	while (SDL_PollEvent(&sdlEvent))
+	{
+		//event when user clicks close window button
+		if (sdlEvent.type == SDL_QUIT)
+		{
+			quit = true;
+		}
+		//if a button was pressed
+		if (sdlEvent.type == SDL_KEYDOWN)
+		{
+			//then check which button
+			//did they press ESC key?
+			if (sdlEvent.key.keysym.scancode == SDL_SCANCODE_ESCAPE)
+			{
+				quit = true;
+			}
+			//hide infobox when space is pressed
+			if (sdlEvent.key.keysym.scancode == SDL_SCANCODE_SPACE)
+			{
+				infoBox.visible = false;
+			}
 
-    //loop thru input events and copy their details one by one into sdl event variable
-    while (SDL_PollEvent(&sdlEvent))
-    {
-        //when user clicks window button
-        if (sdlEvent.type == SDL_QUIT)
-        {
-            quit = true;
-        }
-        //if a button was pressed first
-        if (sdlEvent.type == SDL_KEYDOWN)
-        {
-            //check which button?
-            if (sdlEvent.key.keysym.scancode == SDL_SCANCODE_ESCAPE)
-            {
-                quit = true;
-            }
-            //hide infobox when space is pressed
-            if (sdlEvent.key.keysym.scancode == SDL_SCANCODE_SPACE)
-            {
-                infoBox.visible = false;
-            }
 
-            if (infoBox.visible == false)
-            {
-                //player mov
-                int hx = heroObj.x;
-                int hy = heroObj.y;
+			if (infoBox.visible == false && hero->getHP() > 0)
+			{
+				//player movement
+				int hx = heroObj.x;
+				int hy = heroObj.y;
+				//right dpad on keyboard
+				if (sdlEvent.key.keysym.scancode == SDL_SCANCODE_RIGHT)
+				{
+					hx++;
+				}
+				//left
+				if (sdlEvent.key.keysym.scancode == SDL_SCANCODE_LEFT)
+				{
+					hx--;
+				}
+				//down dpad on keyboard
+				if (sdlEvent.key.keysym.scancode == SDL_SCANCODE_DOWN)
+				{
+					hy++;
+				}
+				//left
+				if (sdlEvent.key.keysym.scancode == SDL_SCANCODE_UP)
+				{
+					hy--;
+				}
+				//if hx and hy are within the grid
+				//AND is land we can walk on (map value of 1)
+				if (hx >= 0 && hx <= 9 && hy >= 0 && hy <= 9 && map[hx][hy] == 1)
+				{
+					//set heroObj.x and y to hx and hy
+					heroObj.x = hx;
+					heroObj.y = hy;
+				}
+				else
+				{
+					//invalid move, dont need to do anything here
+				}
+			}
+		}
+	}
 
-                //right arrow
-                if (sdlEvent.key.keysym.scancode == SDL_SCANCODE_RIGHT)
-                {
-                    hx++;
-                }
-                //left arrow
-                if (sdlEvent.key.keysym.scancode == SDL_SCANCODE_LEFT)
-                {
-                    hx--;
-                }
-                if (sdlEvent.key.keysym.scancode == SDL_SCANCODE_DOWN)
-                {
-                    hy++;
-                }
-                if (sdlEvent.key.keysym.scancode == SDL_SCANCODE_UP)
-                {
-                    hy--;
-                }
-
-                //if hx and hy are within the grid
-                if (hx >= 0 && hx <= 9 && hy >= 0 && hy <= 9 && map[hx][hy] == 1) //within grid and on land check
-                {
-                    heroObj.x = hx;
-                    heroObj.y = hy;
-                }
-                else
-                {
-                    cout << "invalid move" << endl;
-                }
-            }
-        }
-    }
 }
 
 void MapScreen::draw() {
-    SDL_Rect tileRect = { 0, 0, 120, 105 };
+	//MAP DRAWING
+	//tile representing size of 1 grid thing from map
+	SDL_Rect tileRect = { 0,0,120,120 };
+	//loop through and draw each grid value from map array
+	for (int x = 0; x <= 9; x++)
+	{
+		for (int y = 0; y <= 9; y++)
+		{
+			//IF is ground, set draw colour to ground colour
+			//ELSE set to wall colour
+			if (map[x][y] == 1)
+			{
+				//ground
+				SDL_SetRenderDrawColor(renderer, 136, 60, 100, 255);
+			}
+			else
+			{
+				//walls
+				SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+			}
+			//MOVE rectangle to grid position with regards to tile width/height
+			tileRect.x = x * tileRect.w;
+			tileRect.y = y * tileRect.h;
+			//draw rectangle to screen using current draw colour
+			SDL_RenderFillRect(renderer, &tileRect);
+		}
+	}
 
-    for (int i = 0; i <= 9; i++) {
-        for (int y = 0; y <= 9; y++) {
-            if (map[i][y] == 1) {
-                SDL_SetRenderDrawColor(renderer, 136, 60, 100, 255);
-            }
-            else {
-                SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-            }
-            tileRect.x = i * tileRect.w;
-            tileRect.y = y * tileRect.h;
+	//DRAW MAP OBJECTS
+	//draw hero
+	tileRect.x = heroObj.x * tileRect.w; //e.g hero x = 4, y = 6. tile w = 32 h = 32
+	tileRect.y = heroObj.y * tileRect.h;
+	SDL_RenderCopy(renderer, heroTexture, NULL, &tileRect);
+	//draw door
+	tileRect.x = door.x * tileRect.w;
+	tileRect.y = door.y * tileRect.h;
+	SDL_RenderCopy(renderer, doorTexture, NULL, &tileRect);
+	//DRAW MAP OBJECTS IN LIST
+	//loop through list and draw each object
+	for (MapObject mo : mapObjects)
+	{
+		//NOTE: mo is a mapObject copy from mapObjects and is not a direct reference to the mapObject in the list
+		if (mo.active)
+		{
+			tileRect.x = mo.x * tileRect.w;
+			tileRect.y = mo.y * tileRect.h;
+			if (mo.type == 3)//glob
+			{
+				SDL_RenderCopy(renderer, globTexture, NULL, &tileRect);
+			}
+			else//mimic or chest
+			{
+				SDL_RenderCopy(renderer, chestTexture, NULL, &tileRect);
+			}
+		}
+	}
 
-            SDL_RenderFillRect(renderer, &tileRect);
-        }
-    }
 
-    // Draw hero
-    if (heroTexture) {
-        tileRect.x = heroObj.x * tileRect.w;
-        tileRect.y = heroObj.y * tileRect.h;
-        SDL_RenderCopy(renderer, heroTexture, NULL, &tileRect);
-    }
-
-    // Draw door
-    if (doorTexture) {
-        tileRect.x = door.x * tileRect.w;
-        tileRect.y = door.y * tileRect.h;
-        SDL_RenderCopy(renderer, doorTexture, NULL, &tileRect);
-    }
-
-    // Draw other map objects
-    for (MapObject mo : mapObjects)
-    {   
-        if (mo.active)
-        {
-            tileRect.x = mo.x * tileRect.w;
-            tileRect.y = mo.y * tileRect.h;
-        }
-        if (mo.type == 3)
-        {
-            SDL_RenderCopy(renderer, globTexture, NULL, &tileRect);
-        }
-        else
-        {
-            SDL_RenderCopy(renderer, chestTexture, NULL, &tileRect);
-        }
-    }
-
-    //draw infobox on top
-    infoBox.draw();
-
-    // Present the renderer
-    SDL_RenderPresent(renderer);
+	//draw info box on top
+	infoBox.draw();
 }

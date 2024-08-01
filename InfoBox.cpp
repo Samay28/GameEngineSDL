@@ -78,7 +78,7 @@ void InfoBox::draw()
 				SDL_RenderFillRect(renderer, &boxRect);
 
 				//draw border
-
+ 
 				SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 				SDL_RenderDrawRect(renderer, &boxRect);
 
