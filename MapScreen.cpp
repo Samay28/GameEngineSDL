@@ -3,7 +3,14 @@
 
 
 MapScreen::MapScreen(SDL_Renderer* renderer, Hero* hero, int* items)
-{
+{	
+
+	//Note: computer code random is pseudorandom
+	//setting a seed value for the random algo will generate a set of numbers which appear random
+	//seed value to be different each time we run the game
+	
+	srand(time(NULL));
+
 	this->renderer = renderer;
 	this->hero = hero;
 	this->items = items;
@@ -22,9 +29,8 @@ MapScreen::MapScreen(SDL_Renderer* renderer, Hero* hero, int* items)
 	map[2][1] = 1;
 	map[3][1] = 1;
 	map[1][2] = 1;
-	/*map[2][2] = 1;
-	map[3][2] = 1;*/
 
+	 
 	//Open map text file
 	fstream mapFile("assets/map.txt");
 	if (mapFile.is_open())
@@ -112,6 +118,44 @@ MapScreen::~MapScreen()
 	SDL_DestroyTexture(chestTexture);
 }
 
+void MapScreen::itemFound()
+{
+	//randomly pick an item bw 1-4
+	int item = rand()% 4 + 1; //rand gets next number out of random num set
+
+	//try find a free slot for this item
+	bool freeSlotFound = false;
+
+	//once found free slot, set it to item and exit the loop
+	for (int i = 0; i < 10; i++)
+	{
+		if (items[i] == 0)
+		{
+			freeSlotFound = true;
+			items[i] = item;
+			break;
+		}
+	}
+
+	if (freeSlotFound)
+	{
+		if (item == 1)
+			infoBox.setText("Found Yummy Chocolate!");
+		else if(item==2)
+			infoBox.setText("Found a demolishing grenade!");
+		else if (item == 3)
+			infoBox.setText("Found an ATK Boost!");
+		else if (item == 4)
+			infoBox.setText("Found a DEF Boost");
+	}
+	else
+	{
+		infoBox.setText("Your Bag is Full!");
+	}
+
+	infoBox.visible = true;
+}
+
 void MapScreen::update()
 {
 	//read user inputs including keyboard, mouse, gamepads, screen resize/close, touchscreens etc
@@ -172,6 +216,29 @@ void MapScreen::update()
 					//set heroObj.x and y to hx and hy
 					heroObj.x = hx;
 					heroObj.y = hy;
+
+					//if we walked onto a map object
+					for (list<MapObject>::iterator mo = mapObjects.begin(); mo!=mapObjects.end(); mo++) 
+					{	
+						//iterator is a special pointer pointing to a position in a list
+						// dereferencing iterator gives you access to the item at that point in that list
+		
+						//only interact wit active
+						if (mo->active)
+						{
+							//is hero x,y overlapping with this objects x,y?
+							if (heroObj.x == mo->x && heroObj.y == mo->y)
+							{
+								mo->active = false;
+
+								//check that object's type
+								if (mo->type == 5)
+								{
+									itemFound();
+								}
+							}
+						}
+					}
 				}
 				else
 				{

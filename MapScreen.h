@@ -10,6 +10,9 @@
 #include <fstream>//file stream
 #include "InfoBox.h"
 
+#include <stdlib.h> //for useful functions 
+#include <time.h>
+
 using namespace std;
 
 class MapScreen
@@ -34,6 +37,8 @@ public:
 
 	MapScreen(SDL_Renderer* renderer, Hero* hero, int* items);
 	~MapScreen();
+
+	void itemFound();
 
 	void update();
 	void draw();
