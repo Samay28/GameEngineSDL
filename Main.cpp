@@ -23,7 +23,7 @@ int main(int argc, char* argv[])
 	//format of declaring a variable: datatype variableName;
 	string name;
 	//read name into name variable from keyboard
-	//cin = console in
+	//cin = console in ff
 	cin >> name;
 
 	cout << "Welcome to the dungeon " << name << ", muahahahaha!!!" << endl;

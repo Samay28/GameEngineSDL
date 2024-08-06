@@ -71,8 +71,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\Users\Asus\Documents\GitHub\development\SDL2_ttf-2.22.0\include;C:\Users\Asus\Documents\GitHub\development\SDL2_mixer-2.8.0\include;C:\Users\Asus\Documents\GitHub\development\SDL2_image-2.8.2\include;C:\Users\Asus\Documents\GitHub\development\SDL2\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\Asus\Documents\GitHub\development\SDL2_ttf-2.22.0\lib\x64;C:\Users\Asus\Documents\GitHub\development\SDL2_mixer-2.8.0\lib\x64;C:\Users\Asus\Documents\GitHub\development\SDL2_image-2.8.2\lib\x64;C:\Users\Asus\Documents\GitHub\development\SDL2\lib\x64;$(LibraryPath)</LibraryPath>
+    <IncludePath>D:\development\SDL2_mixer-2.8.0\include;D:\development\SDL2_ttf-2.22.0\include;D:\development\SDL2_image-2.8.2\include;D:\development\SDL2\include;$(IncludePath)</IncludePath>
+    <LibraryPath>D:\development\SDL2_image-2.8.2\lib\x64;D:\development\SDL2_ttf-2.22.0\lib\x64;D:\development\SDL2_mixer-2.8.0\lib\x64;D:\development\SDL2\lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -108,12 +108,12 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\Asus\Documents\GitHub\development\SDL2_image-2.8.2\include;C:\Users\Asus\Documents\GitHub\development\SDL2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Users\Asus\Documents\GitHub\development\SDL2_image-2.8.2\lib\x64;C:\Users\Asus\Documents\GitHub\development\SDL2\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_mixer.lib;SDL2_ttf.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
