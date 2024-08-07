@@ -243,6 +243,18 @@ void MapScreen::update()
 								{
 									itemFound();
 								}
+								else if (mo->type == 3)
+								{
+									BattleScreen battle(renderer, hero, items);
+									battle.update();
+
+									if (battle.quit)
+										quit = true;
+								}
+								else if (mo->type == 4)
+								{
+
+								}
 							}
 						}
 					}

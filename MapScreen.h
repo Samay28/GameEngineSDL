@@ -13,6 +13,8 @@
 #include <stdlib.h> //for useful functions 
 #include <time.h>
 
+#include "BattleScreen.h"
+
 using namespace std;
 
 class MapScreen
