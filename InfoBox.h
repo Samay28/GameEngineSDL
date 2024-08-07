@@ -4,12 +4,13 @@
 #include <SDL_ttf.h>
 
 using namespace std;
+
 class InfoBox
 {
 public:
 	SDL_Renderer* renderer;
 
-	TTF_Font* Font;
+	TTF_Font* font;
 
 	string text;
 	SDL_Texture* textTexture = NULL;
@@ -17,6 +18,7 @@ public:
 	SDL_Rect boxRect;
 
 	bool visible = true;
+
 
 	InfoBox();
 	~InfoBox();
@@ -26,4 +28,3 @@ public:
 	void draw();
 };
 
- 

@@ -3,12 +3,12 @@
 
 
 MapScreen::MapScreen(SDL_Renderer* renderer, Hero* hero, int* items)
-{	
-
-	//Note: computer code random is pseudorandom
-	//setting a seed value for the random algo will generate a set of numbers which appear random
-	//seed value to be different each time we run the game
-	
+{
+	//NOTE:computer code random is pseudorandom (fake random)
+	//setting a seed value for the random algorithm will generate a set of numbers which appear random
+	//if we use the same seed value each time then we'll get the exact same 'random' outcomes
+	//THEREFORE we will set the seed as a changing value, the seconds since start of the year
+	//so that the seed value is different each time we run the game
 	srand(time(NULL));
 
 	this->renderer = renderer;
@@ -22,15 +22,16 @@ MapScreen::MapScreen(SDL_Renderer* renderer, Hero* hero, int* items)
 		{
 			map[x][y] = 0;
 		}
-
+		
 	}
 	//manual room building
 	map[1][1] = 1;
 	map[2][1] = 1;
 	map[3][1] = 1;
 	map[1][2] = 1;
+	/*map[2][2] = 1;
+	map[3][2] = 1;*/
 
-	 
 	//Open map text file
 	fstream mapFile("assets/map.txt");
 	if (mapFile.is_open())
@@ -120,40 +121,39 @@ MapScreen::~MapScreen()
 
 void MapScreen::itemFound()
 {
-	//randomly pick an item bw 1-4
-	int item = rand()% 4 + 1; //rand gets next number out of random num set
-
-	//try find a free slot for this item
+	//randomly pick an item (between 1-4)
+	int item = rand() % 4 + 1;//rand gets next number out of random number set (value between 0-2147483647)
+	//try find a free slot for this item!
 	bool freeSlotFound = false;
-
-	//once found free slot, set it to item and exit the loop
 	for (int i = 0; i < 10; i++)
 	{
+		//once find free slot, set it to the item and exit the loop
 		if (items[i] == 0)
 		{
 			freeSlotFound = true;
 			items[i] = item;
-			break;
+			break;//exits the loop
 		}
 	}
 
 	if (freeSlotFound)
 	{
 		if (item == 1)
-			infoBox.setText("Found Yummy Chocolate!");
-		else if(item==2)
-			infoBox.setText("Found a demolishing grenade!");
+			infoBox.setText("Found chocolate!");
+		else if (item ==2)
+			infoBox.setText("Found grenade!");
 		else if (item == 3)
-			infoBox.setText("Found an ATK Boost!");
+			infoBox.setText("Found ATK Boost!");
 		else if (item == 4)
-			infoBox.setText("Found a DEF Boost");
+			infoBox.setText("Found DEF Boost!");
 	}
 	else
 	{
-		infoBox.setText("Your Bag is Full!");
+		infoBox.setText("You're bag is full!");
 	}
-
 	infoBox.visible = true;
+
+
 }
 
 void MapScreen::update()
@@ -161,7 +161,7 @@ void MapScreen::update()
 	//read user inputs including keyboard, mouse, gamepads, screen resize/close, touchscreens etc
 	SDL_Event sdlEvent;
 	//loop through input events and copy their details one by one into our sdlEvent variable
-	while (SDL_PollEvent(&sdlEvent))
+	while(SDL_PollEvent(&sdlEvent))
 	{
 		//event when user clicks close window button
 		if (sdlEvent.type == SDL_QUIT)
@@ -183,7 +183,7 @@ void MapScreen::update()
 				infoBox.visible = false;
 			}
 
-
+			
 			if (infoBox.visible == false && hero->getHP() > 0)
 			{
 				//player movement
@@ -217,34 +217,33 @@ void MapScreen::update()
 					heroObj.x = hx;
 					heroObj.y = hy;
 
-
+					//can we escape the dungeon?
 					if (!doorLocked && !escaped && heroObj.x == door.x && heroObj.y == door.y)
 					{
-						infoBox.setText("You Escaped!");
+						infoBox.setText("You escaped!");
 						infoBox.visible = true;
 						escaped = true;
 					}
-					//if we walked onto a map object
-					for (list<MapObject>::iterator mo = mapObjects.begin(); mo!=mapObjects.end(); mo++) 
-					{	
+
+					//see if we walked onto a map object
+					//for(int i = 1; i <= 10; i++)
+					for (list<MapObject>::iterator mo = mapObjects.begin(); mo != mapObjects.end(); mo++)
+					{
 						//iterator is a special pointer pointing to a position in a list
-						// dereferencing iterator gives you access to the item at that point in that list
-		
-						//only interact wit active
-						if (mo->active)
+						//dereferencing(*) iterator gives you access to the item at that point in the list
+
+						//only interact with active map objects
+						if ((*mo).active)
 						{
-							//is hero x,y overlapping with this objects x,y?
+							//is hero's x,y overlapping this mapobjects x,y
 							if (heroObj.x == mo->x && heroObj.y == mo->y)
 							{
 								mo->active = false;
 
-								//check that object's type
-								if (mo->type == 5)
+								//check map objects type and deal with accordingly
+								if (mo->type == 3)
 								{
-									itemFound();
-								}
-								else if (mo->type == 3)
-								{
+									//TODO battle glob
 									BattleScreen battle(renderer, hero, items);
 									battle.update();
 
@@ -253,7 +252,12 @@ void MapScreen::update()
 								}
 								else if (mo->type == 4)
 								{
-
+									//TODO battle mimic
+								}
+								else if (mo->type == 5)
+								{
+									//open chest get item :D
+									itemFound();
 								}
 							}
 						}
@@ -267,15 +271,16 @@ void MapScreen::update()
 		}
 	}
 
-	//check if mapobjects all inactive and if we should unlock the door
+	//check to see if map objects all inactive and if we should unlock the door
 	if (!infoBox.visible && doorLocked)
 	{
 		bool monstersAlive = false;
 		for (MapObject mo : mapObjects)
 		{
-			//if a monster
+			//if is a monster(glob or mimic)
 			if (mo.type == 3 || mo.type == 4)
 			{
+				//if is active monster?
 				if (mo.active)
 				{
 					monstersAlive = true;
@@ -283,16 +288,17 @@ void MapScreen::update()
 				}
 			}
 		}
+		//if all monsters are dead, unlock the door
 		if (!monstersAlive)
 		{
 			doorLocked = false;
-			infoBox.setText("The Door is Unlocked");
+			infoBox.setText("The door is unlocked!");
 			infoBox.visible = true;
 		}
 	}
 
-	//once user closes infobox quit the game
-	if (!infoBox.visible && (escaped || hero->getHP()<=0))
+	//has user closed infobox after escaping
+	if (!infoBox.visible && (escaped || hero->getHP() <= 0))
 	{
 		quit = true;
 	}
@@ -302,7 +308,7 @@ void MapScreen::update()
 void MapScreen::draw() {
 	//MAP DRAWING
 	//tile representing size of 1 grid thing from map
-	SDL_Rect tileRect = { 0,0,120,120 };
+	SDL_Rect tileRect = { 0,0,32,32 };
 	//loop through and draw each grid value from map array
 	for (int x = 0; x <= 9; x++)
 	{
@@ -321,8 +327,8 @@ void MapScreen::draw() {
 				SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 			}
 			//MOVE rectangle to grid position with regards to tile width/height
-			tileRect.x = x * tileRect.w;
-			tileRect.y = y * tileRect.h;
+			tileRect.x = x*tileRect.w;
+			tileRect.y = y*tileRect.h;
 			//draw rectangle to screen using current draw colour
 			SDL_RenderFillRect(renderer, &tileRect);
 		}
@@ -334,7 +340,7 @@ void MapScreen::draw() {
 	tileRect.y = heroObj.y * tileRect.h;
 	SDL_RenderCopy(renderer, heroTexture, NULL, &tileRect);
 	//draw door
-	tileRect.x = door.x * tileRect.w;
+	tileRect.x = door.x * tileRect.w; 
 	tileRect.y = door.y * tileRect.h;
 	SDL_RenderCopy(renderer, doorTexture, NULL, &tileRect);
 	//DRAW MAP OBJECTS IN LIST

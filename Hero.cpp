@@ -22,7 +22,7 @@ void Hero::heal(int amount) {
 	hp += amount; //hp = hp + amount;
 	if (hp > hpMax)
 		hp = hpMax;
-
+	
 }
 void Hero::atkBoost(int amount) {
 	str += amount;

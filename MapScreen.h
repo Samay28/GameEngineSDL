@@ -10,8 +10,8 @@
 #include <fstream>//file stream
 #include "InfoBox.h"
 
-#include <stdlib.h> //for useful functions 
-#include <time.h>
+#include <stdlib.h>//useful functions including rand and srand
+#include <time.h>//time in seconds since start of year
 
 #include "BattleScreen.h"
 
@@ -31,7 +31,7 @@ public:
 	MapObject door;
 	list<MapObject> mapObjects;
 
-	SDL_Texture* heroTexture, * doorTexture, * globTexture, * chestTexture;
+	SDL_Texture *heroTexture, *doorTexture, *globTexture, *chestTexture;
 
 	bool quit = false;
 	bool escaped = false;
