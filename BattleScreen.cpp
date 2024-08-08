@@ -46,15 +46,31 @@ BattleScreen::~BattleScreen() {
     if (nameTexture) SDL_DestroyTexture(nameTexture);
 }
 
-void BattleScreen::update() {
-    while (!battleFinished) {
+void BattleScreen::update() 
+{   
+
+    //deltatime
+    float dt = 0;
+    //last time we worked out deltatime
+    Uint32 lastUpdate = SDL_GetTicks();
+
+    while (!battleFinished) 
+    {   
+        Uint32 timeDiff = SDL_GetTicks() - lastUpdate;
+        dt = timeDiff / 1000.0f;
+        lastUpdate = SDL_GetTicks(); //update this so we get correct diff
+
         SDL_Event sdlEvent;
-        while (SDL_PollEvent(&sdlEvent)) {
-            if (sdlEvent.type == SDL_QUIT) {
+        while (SDL_PollEvent(&sdlEvent)) 
+        {
+            if (sdlEvent.type == SDL_QUIT) 
+            {
                 quit = true;
             }
-            if (sdlEvent.type == SDL_KEYDOWN) {
-                if (sdlEvent.key.keysym.scancode == SDL_SCANCODE_ESCAPE) {
+            if (sdlEvent.type == SDL_KEYDOWN)
+            {
+                if (sdlEvent.key.keysym.scancode == SDL_SCANCODE_ESCAPE) 
+                {
                     quit = true;
                 }
             }
