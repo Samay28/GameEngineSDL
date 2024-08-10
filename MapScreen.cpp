@@ -244,7 +244,7 @@ void MapScreen::update()
 								if (mo->type == 3)
 								{
 									//TODO battle glob
-									BattleScreen battle(renderer, hero, items);
+									BattleScreen battle(renderer, hero, items, globType);
 									battle.update();
 
 									if (battle.quit)
@@ -253,6 +253,11 @@ void MapScreen::update()
 								else if (mo->type == 4)
 								{
 									//TODO battle mimic
+									BattleScreen battle(renderer, hero, items, mimicType);
+									battle.update();
+
+									if (battle.quit)
+										quit = true;
 								}
 								else if (mo->type == 5)
 								{

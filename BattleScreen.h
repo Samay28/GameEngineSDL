@@ -8,6 +8,8 @@
 #include "Hero.h"
 #include "Glob.h"
 #include "Mimic.h"
+#include "CharacterAnimationSet.h"
+#include "CharacterType.h"
 //TODO MORE
 
 using namespace std;
@@ -29,9 +31,13 @@ public:
 
 	SDL_Texture* nameTexture;
 	SDL_Rect nameRect;
+
+	CharacterAnimationSet heroAnimationsSet;
+	CharacterAnimationSet enemyAnimationSet;
+
 	//TODO add lots more
 
-	BattleScreen(SDL_Renderer* renderer, Hero* hero, int* items);
+	BattleScreen(SDL_Renderer* renderer, Hero* hero, int* items, CharacterType enemyType);
 	~BattleScreen();
 	void update();
 	void draw();

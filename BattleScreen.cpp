@@ -2,7 +2,13 @@
 #include <iostream>
 using namespace std;
 
-BattleScreen::BattleScreen(SDL_Renderer* renderer, Hero* hero, int* items) {
+BattleScreen::BattleScreen(SDL_Renderer* renderer, Hero* hero, int* items, CharacterType enemyType)
+{
+    if (enemyType != globType && enemyType!= mimicType)//just casual error prevention
+    {
+        enemyType = globType;
+    }
+
     this->renderer = renderer;
     this->hero = hero;
     this->items = items;
@@ -35,6 +41,14 @@ BattleScreen::BattleScreen(SDL_Renderer* renderer, Hero* hero, int* items) {
                 nameRect.x = 90;
                 nameRect.y = 180;
                 SDL_QueryTexture(nameTexture, NULL, NULL, &nameRect.w, &nameRect.h);
+
+                heroAnimationsSet.setup(renderer, 47, 181, heroType);
+                enemyAnimationSet.setup(renderer, 246, 114, enemyType);
+
+                if (enemyType == globType)
+                    enemy = new Glob();
+                else if (enemyType == mimicType)
+                    enemy = new Mimic();
             }
         }
         TTF_CloseFont(font);
@@ -78,6 +92,10 @@ void BattleScreen::update()
         if (quit)
             battleFinished = true;
 
+        //update animation
+        heroAnimationsSet.update(dt);
+        enemyAnimationSet.update(dt);
+
         draw();
     }
 }
@@ -92,6 +110,10 @@ void BattleScreen::draw() {
         SDL_RenderCopy(renderer, backgroundTexture, NULL, NULL);
     }
 
+    enemyAnimationSet.draw();
+
+    heroAnimationsSet.draw();
+
     // UI bottom bar
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
     SDL_Rect bottomUIBar = { 0, 180, 320, 60 }; // x, y, w, h
@@ -103,7 +125,7 @@ void BattleScreen::draw() {
     // Draw name
     if (nameTexture) {
         SDL_RenderCopy(renderer, nameTexture, NULL, &nameRect);
-    
+        
     }
     else {
         cout << "Name texture is NULL" << endl;

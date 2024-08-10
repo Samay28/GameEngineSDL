@@ -16,7 +16,7 @@ public:
 	AnimationManager();
 
 	void chanegAnimation(Animation* animation);
-	void setAnimation(bool loopAnimation);
+	void setAnimationLooping(bool loopAnimation);
 	void resetAnimation();
 	void update(float dt); //need deltatime to work out frame timer
 	void draw(int x, int y);

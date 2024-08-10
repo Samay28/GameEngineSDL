@@ -15,7 +15,7 @@ void AnimationManager::chanegAnimation(Animation* animation)
 	resetAnimation();
 }
 
-void AnimationManager::setAnimation(bool loopAnimation)
+void AnimationManager::setAnimationLooping(bool loopAnimation)
 {
 	this->loopAnimation = loopAnimation;
 }
