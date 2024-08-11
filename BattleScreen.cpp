@@ -54,6 +54,11 @@ BattleScreen::BattleScreen(SDL_Renderer* renderer, Hero* hero, int* items, Chara
                 //setup health bars
                 heroHP.setup(renderer, 90, 194);
                 enemyHP.setup(renderer, 190, 10);
+
+                //setup buttons
+                fightButton.setup(renderer, { 0,180,80,30 }, "Fight");
+                fightButton.selected = true;
+                itemButton.setup(renderer, { 0,210,80,30 }, "Item");
             }
         }
         TTF_CloseFont(font);
@@ -91,6 +96,22 @@ void BattleScreen::update()
                 if (sdlEvent.key.keysym.scancode == SDL_SCANCODE_ESCAPE) 
                 {
                     quit = true;
+                }
+                else if (sdlEvent.key.keysym.scancode == SDL_SCANCODE_UP)
+                {
+                    if (heroesTurn)
+                    {
+                        fightButton.selected = true;
+                        itemButton.selected = false;
+                    }
+                }
+                else if (sdlEvent.key.keysym.scancode == SDL_SCANCODE_DOWN)
+                {
+                    if (heroesTurn)
+                    {
+                        fightButton.selected = false;
+                        itemButton.selected = true;
+                    }
                 }
             }
         }
@@ -143,6 +164,9 @@ void BattleScreen::draw() {
     }
     heroHP.draw();
     enemyHP.draw();
+
+    fightButton.draw();
+    itemButton.draw();
     // Present frame to screen
     SDL_RenderPresent(renderer);
 

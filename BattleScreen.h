@@ -11,6 +11,7 @@
 #include "CharacterAnimationSet.h"
 #include "CharacterType.h"
 #include "HPBar.h"
+#include "BattleButton.h"
 //TODO MORE
 
 using namespace std;
@@ -28,7 +29,7 @@ public:
 
 	bool battleFinished = false;
 	bool quit;
-	bool heroesTurn;
+	bool heroesTurn = true;
 
 	SDL_Texture* nameTexture;
 	SDL_Rect nameRect;
@@ -38,6 +39,9 @@ public:
 
 	HPBar heroHP;
 	HPBar enemyHP;
+
+	BattleButton fightButton;
+	BattleButton itemButton;
 	//TODO add lots more
 
 	BattleScreen(SDL_Renderer* renderer, Hero* hero, int* items, CharacterType enemyType);
