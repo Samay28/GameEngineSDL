@@ -226,7 +226,6 @@ void MapScreen::update()
 					}
 
 					//see if we walked onto a map object
-					//for(int i = 1; i <= 10; i++)
 					for (list<MapObject>::iterator mo = mapObjects.begin(); mo != mapObjects.end(); mo++)
 					{
 						//iterator is a special pointer pointing to a position in a list
@@ -236,6 +235,7 @@ void MapScreen::update()
 						if ((*mo).active)
 						{
 							//is hero's x,y overlapping this mapobjects x,y
+
 							if (heroObj.x == mo->x && heroObj.y == mo->y)
 							{
 								mo->active = false;

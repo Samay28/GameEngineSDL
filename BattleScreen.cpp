@@ -49,6 +49,11 @@ BattleScreen::BattleScreen(SDL_Renderer* renderer, Hero* hero, int* items, Chara
                     enemy = new Glob();
                 else if (enemyType == mimicType)
                     enemy = new Mimic();
+
+
+                //setup health bars
+                heroHP.setup(renderer, 90, 194);
+                enemyHP.setup(renderer, 190, 10);
             }
         }
         TTF_CloseFont(font);
@@ -96,6 +101,12 @@ void BattleScreen::update()
         heroAnimationsSet.update(dt);
         enemyAnimationSet.update(dt);
 
+        //update health bars
+        heroHP.hp = hero->getHP();
+        heroHP.hpMax = hero->getHPMax();
+        enemyHP.hp = enemy->getHP();
+        enemyHP.hpMax = enemy->getHPMax();
+
         draw();
     }
 }
@@ -130,7 +141,8 @@ void BattleScreen::draw() {
     else {
         cout << "Name texture is NULL" << endl;
     }
-
+    heroHP.draw();
+    enemyHP.draw();
     // Present frame to screen
     SDL_RenderPresent(renderer);
 

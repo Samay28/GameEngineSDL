@@ -54,6 +54,9 @@
     <ClCompile Include="CharacterAnimationSet.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="HPBar.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MapScreen.h">
@@ -93,6 +96,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CharacterAnimationSet.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="HPBar.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

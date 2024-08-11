@@ -10,6 +10,7 @@
 #include "Mimic.h"
 #include "CharacterAnimationSet.h"
 #include "CharacterType.h"
+#include "HPBar.h"
 //TODO MORE
 
 using namespace std;
@@ -35,6 +36,8 @@ public:
 	CharacterAnimationSet heroAnimationsSet;
 	CharacterAnimationSet enemyAnimationSet;
 
+	HPBar heroHP;
+	HPBar enemyHP;
 	//TODO add lots more
 
 	BattleScreen(SDL_Renderer* renderer, Hero* hero, int* items, CharacterType enemyType);
