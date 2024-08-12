@@ -249,6 +249,11 @@ void MapScreen::update()
 
 									if (battle.quit)
 										quit = true;
+									else if (hero->getHP() <= 0)
+									{
+										infoBox.setText("You Died");
+										infoBox.visible = true;
+									}
 								}
 								else if (mo->type == 4)
 								{
@@ -258,6 +263,11 @@ void MapScreen::update()
 
 									if (battle.quit)
 										quit = true;
+									else if (hero->getHP() <= 0)
+									{
+										infoBox.setText("You Died");
+										infoBox.visible = true;
+									}
 								}
 								else if (mo->type == 5)
 								{

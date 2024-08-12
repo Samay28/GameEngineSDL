@@ -12,6 +12,7 @@
 #include "CharacterType.h"
 #include "HPBar.h"
 #include "BattleButton.h"
+#include "BattleEffects.h"
 //TODO MORE
 
 using namespace std;
@@ -44,6 +45,8 @@ public:
 	BattleButton itemButton;
 
 	int heroDmg = 0, enemyDmg = 0;
+
+	BattleEffects battleEffects;
 	//TODO add lots more
 
 	BattleScreen(SDL_Renderer* renderer, Hero* hero, int* items, CharacterType enemyType);
