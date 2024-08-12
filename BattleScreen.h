@@ -42,10 +42,13 @@ public:
 
 	BattleButton fightButton;
 	BattleButton itemButton;
+
+	int heroDmg = 0, enemyDmg = 0;
 	//TODO add lots more
 
 	BattleScreen(SDL_Renderer* renderer, Hero* hero, int* items, CharacterType enemyType);
 	~BattleScreen();
+	bool animationsPlaying();
 	void update();
 	void draw();
 };
