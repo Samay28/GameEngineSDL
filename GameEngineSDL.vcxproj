@@ -145,6 +145,7 @@
     <ClCompile Include="Hero.cpp" />
     <ClCompile Include="HPBar.cpp" />
     <ClCompile Include="InfoBox.cpp" />
+    <ClCompile Include="ItemMenu.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MapObject.cpp" />
     <ClCompile Include="MapScreen.cpp" />
@@ -164,6 +165,7 @@
     <ClInclude Include="Hero.h" />
     <ClInclude Include="HPBar.h" />
     <ClInclude Include="InfoBox.h" />
+    <ClInclude Include="ItemMenu.h" />
     <ClInclude Include="MapObject.h" />
     <ClInclude Include="MapScreen.h" />
     <ClInclude Include="Mimic.h" />

@@ -72,6 +72,9 @@ BattleScreen::BattleScreen(SDL_Renderer* renderer, Hero* hero, int* items, Chara
 
     //setup battl efx
     battleEffects.setup(renderer, enemyAnimationSet.x, enemyAnimationSet.y);
+
+    //setup itemMenu
+    itemMenu.setup(renderer, items, 0, 0);
 }
 
 BattleScreen::~BattleScreen() {
@@ -115,28 +118,61 @@ void BattleScreen::update()
                 else if (sdlEvent.key.keysym.scancode == SDL_SCANCODE_UP)
                 {
                     if (heroesTurn)
-                    {
-                        fightButton.selected = true;
-                        itemButton.selected = false;
+                    {   
+                        if (itemMenu.visible)
+                        {
+                            itemMenu.moveUp();
+                        }
+                        else
+                        {
+                            fightButton.selected = true;
+                            itemButton.selected = false;
+                        }
+                        
                     }
                 }
                 else if (sdlEvent.key.keysym.scancode == SDL_SCANCODE_DOWN)
                 {
                     if (heroesTurn)
-                    {
+                    {   
+                        if (itemMenu.visible)
+                        {
+                            itemMenu.moveDown();
+                        }
+                        else
+                        {
                         fightButton.selected = false;
                         itemButton.selected = true;
+                        }
                     }
                 }
                 else if (sdlEvent.key.keysym.scancode == SDL_SCANCODE_SPACE && sdlEvent.key.repeat==0)
                 {
                     if (heroesTurn && !animationsPlaying())
-                    {
-                        if (fightButton.selected)
+                    {   
+                        if (itemMenu.visible)
+                        {
+                            //if selected item was cancelled or a noItem, do nothing
+                            if (itemMenu.selectedItemIndex == 10 || items[itemMenu.selectedItemIndex] == 0)
+                            {
+                                
+                            }
+                            else
+                            {
+                                //use item
+                            }
+                            itemMenu.visible = false;
+                                
+                        }
+                        else if (fightButton.selected)
                         {
                             heroAnimationsSet.doAttack();
                             enemyDmg = hero->getDamage();
                             heroesTurn = false;
+                        }
+                        else if (itemButton.selected)
+                        {
+                            itemMenu.visible = true;
                         }
                     }
                 }
@@ -233,6 +269,10 @@ void BattleScreen::draw() {
 
     fightButton.draw();
     itemButton.draw();
+
+    //draw itemMenu
+    itemMenu.draw();
+
 
     battleEffects.draw();
     // Present frame to screen

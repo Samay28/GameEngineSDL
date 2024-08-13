@@ -13,6 +13,7 @@
 #include "HPBar.h"
 #include "BattleButton.h"
 #include "BattleEffects.h"
+#include "ItemMenu.h"
 //TODO MORE
 
 using namespace std;
@@ -47,7 +48,9 @@ public:
 	int heroDmg = 0, enemyDmg = 0;
 
 	BattleEffects battleEffects;
-	//TODO add lots more
+	
+
+	ItemMenu itemMenu;
 
 	BattleScreen(SDL_Renderer* renderer, Hero* hero, int* items, CharacterType enemyType);
 	~BattleScreen();
