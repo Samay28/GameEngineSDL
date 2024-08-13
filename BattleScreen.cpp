@@ -88,6 +88,41 @@ bool BattleScreen::animationsPlaying()
     return animating;
 }
 
+void BattleScreen::useItem()
+{
+    if (items[itemMenu.selectedItemIndex] == 1)
+    {
+        battleEffects.setXY(heroAnimationsSet.x, heroAnimationsSet.y);
+        battleEffects.doHeal();
+
+        hero->heal(10);
+    }
+    else if (items[itemMenu.selectedItemIndex] == 2)
+    {
+        battleEffects.setXY(enemyAnimationSet.x, enemyAnimationSet.y);
+        battleEffects.doExplode();
+        enemyDmg = 20;
+    }
+    else if (items[itemMenu.selectedItemIndex] == 3)
+    {
+        battleEffects.setXY(heroAnimationsSet.x, heroAnimationsSet.y);
+        battleEffects.doAtkBoost();
+        hero->atkBoost(2);
+    }
+    else if (items[itemMenu.selectedItemIndex] == 4)
+    {
+        battleEffects.setXY(heroAnimationsSet.x, heroAnimationsSet.y);
+        battleEffects.doDefBoost();
+        hero->defBoost(2);
+    }
+
+    //clear items from inv
+    items[itemMenu.selectedItemIndex] = 0;
+
+    //change turns
+    heroesTurn = false;
+}
+
 void BattleScreen::update() 
 {   
 
@@ -155,11 +190,12 @@ void BattleScreen::update()
                             //if selected item was cancelled or a noItem, do nothing
                             if (itemMenu.selectedItemIndex == 10 || items[itemMenu.selectedItemIndex] == 0)
                             {
-                                
+                                //do nothing
                             }
                             else
                             {
                                 //use item
+                                useItem();
                             }
                             itemMenu.visible = false;
                                 

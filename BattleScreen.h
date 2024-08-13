@@ -55,6 +55,7 @@ public:
 	BattleScreen(SDL_Renderer* renderer, Hero* hero, int* items, CharacterType enemyType);
 	~BattleScreen();
 	bool animationsPlaying();
+	void useItem();
 	void update();
 	void draw();
 };
